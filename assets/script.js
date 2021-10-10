@@ -8,7 +8,7 @@ const renderPostsTempls = (data) => {
     <div class="content">
         <p>${data.body}</p>
     </div>
-    <a href="#">Details</a>
+    <a href="#" data-id="${data.id}" class="blog-link">Details</a>
 </div>`
 }
 
@@ -21,13 +21,29 @@ const inserIntoClass = (calssName, content) => {
     elmt[0].innerHTML = content;
 }
 
-const renderPosts = async () => {
+const onLinkClick = (event) => {
+    event.preventDefault(); 
+    const targetElmn = event.target;
+    const { id } = targetElmn.dataset
+    console.log("clcked: ", id)
+}
+
+const render = async () => {
     const posts = await fetchApi('https://jsonplaceholder.typicode.com/posts');    
     const postContent = posts.map( post => renderPostsTempls(post) ).join(''); 
 
-    inserIntoClass('blog-list', postContent)
+    inserIntoClass('blog-list', postContent);
+    onSinglePostActions();
+}
+
+const onSinglePostActions = async () => {
+    const blogLink = document.getElementsByClassName('blog-link'); 
+    for( link of blogLink) {
+        link.addEventListener('click', onLinkClick)
+    }
 }
  
 
-renderPosts();
+render();
+
  
