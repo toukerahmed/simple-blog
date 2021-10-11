@@ -8,9 +8,11 @@ const renderPostsTempls = (data) => {
     <div class="content">
         <p>${data.body}</p>
     </div>
-    <a href="#" data-id="${data.id}" class="blog-link">Details</a>
+    <a href="#" data-id="${data.id}" class="blog-link button">Details</a>
 </div>`
 }
+
+
 
 const inserIntoClass = (calssName, content) => {
     const elmt = document.getElementsByClassName(calssName)
@@ -20,12 +22,24 @@ const inserIntoClass = (calssName, content) => {
     }
     elmt[0].innerHTML = content;
 }
-
+const inserIntoModal = (calssName, content) => {
+    const elmt = document.getElementsByClassName(calssName)
+    if (elmt.length === 0) {
+        console.warn(calssName, ' class not found!');
+        return;
+    }
+    elmt[0].innerHTML = content;
+}
 const onLinkClick = (event) => {
     event.preventDefault(); 
     const targetElmn = event.target;
-    const { id } = targetElmn.dataset
+    const { id } = targetElmn.dataset;
+
+    const modal = document.getElementById("myModal");
+    modal.style.display = "block";
+    
     console.log("clcked: ", id)
+    modalrender();
 }
 
 const render = async () => {
@@ -36,13 +50,14 @@ const render = async () => {
     onSinglePostActions();
 }
 
+
 const onSinglePostActions = async () => {
     const blogLink = document.getElementsByClassName('blog-link'); 
     for( link of blogLink) {
         link.addEventListener('click', onLinkClick)
     }
 }
- 
+
 
 render();
 
