@@ -1,48 +1,44 @@
 const renderModalempls = (data) => {
-    return `<div class="blog">
-    <div class="modal-content">
+	return `<div class="blog">
+    <h3>${data.title}</h3>
+    <div class="content">
         <p>${data.body}</p>
     </div>
-     <a href="#" data-id="${data.id}" class="modal-link"></a>
-</div>`
-}
+</div>`;
+};
 
+const modalrender = async (id) => {
+	// Remove all content from modal body
+	inserIntoClass('modal-content', '');
+	// call api for fetch the post by ID
+	const post = await fetchApi(`https://jsonplaceholder.typicode.com/posts/${id}`);
+	// Generate post content markup
+	const postContent = renderModalempls(post);
+	// Insert post content into modal body
+	inserIntoClass('modal-content', postContent);
 
-const modalrender = async () => {
-    const posts = await fetchApi('https://jsonplaceholder.typicode.com/posts');    
-    const postContent = posts.map( post => renderModalempls(post) );
-    //console.log(postContent); 
-    const modalPost = posts.body;
-
-
-    inserIntoClass('modal-content', postContent);
-    
-    onModalPostActions();
-}
-
-
+	onModalPostActions();
+};
 
 const onModalPostActions = async () => {
-    const modalLink = document.getElementsByClassName('modal-link'); 
-    for( link of modalLink) {
-        link.addEventListener('click', onLinkClick)
-    }
-}
+	const modalLink = document.getElementsByClassName('modal-link');
+	for (link of modalLink) {
+		link.addEventListener('click', onLinkClick);
+	}
+};
 
+const modal = document.getElementById('myModal');
 
+const btn = document.getElementsByClassName('blog-link');
 
-const modal = document.getElementById("myModal");
+const span = document.getElementsByClassName('close')[0];
 
-const btn = document.getElementsByClassName("blog-link");
+span.onclick = function () {
+	modal.style.display = 'none';
+};
 
-const span = document.getElementsByClassName("close")[0];
-
-span.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
+window.onclick = function (event) {
+	if (event.target == modal) {
+		modal.style.display = 'none';
+	}
+};
